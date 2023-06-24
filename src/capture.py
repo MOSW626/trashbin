@@ -10,7 +10,7 @@ if cap.isOpened():
             cv2.imshow('camera', frame)
 
             if cv2.waitKey(1) != -1:
-                cv2.imwrite('photo.jpg', frame)
+                cv2.imwrite('photo2.jpg', frame)
                 break
 
         else:
