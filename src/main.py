@@ -1,3 +1,8 @@
+# https://webnautes.tistory.com/1492
+# /dev/ttyACM0
+# https://mosw.tistory.com/6
+
+
 import cv2
 import numpy as np
 from keras.models import load_model
