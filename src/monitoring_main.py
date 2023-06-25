@@ -66,7 +66,7 @@ while True:
     # Resize the raw image into (224-height,224-width) pixels.
     image = cv2.resize(image, (224, 224), interpolation=cv2.INTER_AREA)
     # Show the image in a window
-   # cv2.imshow('Webcam Image', image)
+    cv2.imshow('Webcam Image', image)
     # Make the image a numpy array and reshape it to the model's input shape.
     image = np.asarray(image, dtype=np.float32).reshape(1, 224, 224, 3)
     # Normalize the image array
@@ -74,45 +74,43 @@ while True:
     # Have the model predict what the current image is. Model.predict
     # returns an array of percentages. Example: [0.2, 0.8] meaning it's 20% sure
     # it is the first label and 80% sure it's the second label.
-    probabilities = model.predict(image, verbose = 0)
+    probabilities = model.predict(image)
     # Print the label with the highest probability
-   # print(labels[np.argmax(probabilities)])
+    print(labels[np.argmax(probabilities)])
     # Listen to the keyboard for presses.
     keyboard_input = cv2.waitKey(1)
 
     dist = distance()
-    #print("Measured Distance = %.1f cm" % dist)
+    print("Measured Distance = %.1f cm" % dist)
 
     time.sleep(1)
 
     ser.reset_input_buffer()
     ser.write(b"3\n")
     line = ser.readline().decode('utf-8').rstrip()
-    # print(line)
+    print(line)
     time.sleep(1)
 
     if dist <= 8:
         if np.argmax(probabilities) == 0:  # Changed from '0' to 0
             ser.write(b"1\n")  # Changed '/n' to '\n'
             line = ser.readline().decode('utf-8').rstrip()
-            # print(line)
+            print(line)
             time.sleep(1)
             ser.write(b"1\n")  # Changed '/n' to '\n'
             line = ser.readline().decode('utf-8').rstrip()
-            print("no color")
-            # print(line)
+            print(line)
             time.sleep(1)
             continue
 
         if np.argmax(probabilities) == 1:  # Changed from '1' to 1
             ser.write(b"2\n")  # Changed '/n' to '\n'
             line = ser.readline().decode('utf-8').rstrip()
-            # print(line)
+            print(line)
             time.sleep(1)
             ser.write(b"2\n")  # Changed '/n' to '\n'
             line = ser.readline().decode('utf-8').rstrip()
-            print("color")
-            # print(line)
+            print(line)
             time.sleep(1)
             continue
         continue
