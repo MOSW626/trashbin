@@ -1,5 +1,5 @@
 # USAGE
-# python stop_detector.py 
+# python stop_detector.py
 
 # import the necessary packages
 from keras.preprocessing.image import img_to_array
@@ -14,7 +14,7 @@ import cv2
 import os
 
 # define the paths to the Not STOP-NoT-STOP deep learning model
-MODEL_PATH = "./models/stop_not_stop.model"
+MODEL_PATH = "keras_model.h5"
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
@@ -24,7 +24,7 @@ TOTAL_CONSEC = 0
 TOTAL_THRESH = 20
 
 # initialize is the sign alarm has been triggered
-STOP = False
+CET = False
 
 # load the model
 print("[INFO] loading model...")
@@ -56,32 +56,32 @@ while True:
 
 	# classify the input image and initialize the label and
 	# probability of the prediction
-	(notStop, stop) = model.predict(image)[0]
-	label = "Not Stop"
-	proba = notStop
+	(PET, CET) = model.predict(image)[0]
+	label = "PET"
+	proba = PET
 
 	# check to see if stop sign was detected using our convolutional
 	# neural network
-	if stop > notStop:
+	if CET > PET:
 		# update the label and prediction probability
-		label = "Stop"
-		proba = stop
+		label = "CET"
+		proba = CET
 
 		# increment the total number of consecutive frames that
 		# contain stop
 		TOTAL_CONSEC += 1
 
-		# check to see if we should raise the stop sign alarm
-		if not STOP and TOTAL_CONSEC >= TOTAL_THRESH:
+		# check to see if we should raise the cet sign alarm
+		if not CET and TOTAL_CONSEC >= TOTAL_THRESH:
 			# indicate that stop has been found
-			STOP = True
-			print("Stop Sign...")
+			CET = True
+			print("CET Sign...")
 
 	# otherwise, reset the total number of consecutive frames and the
 	# stop sign alarm
 	else:
 		TOTAL_CONSEC = 0
-		STOP = False
+		CET = False
 
 	# build the label and draw it on the frame
 	label = "{}: {:.2f}%".format(label, proba * 100)
@@ -92,7 +92,7 @@ while True:
 	# show the output frame
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
- 
+
 	# if the `q` key was pressed, break from the loop
 	if key == ord("q"):
 		break
