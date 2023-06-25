@@ -6,6 +6,8 @@
 import cv2
 import numpy as np
 from keras.models import load_model
+import serial
+import time
 
 # Load the model
 model = load_model('keras_model.h5')
@@ -15,6 +17,9 @@ camera = cv2.VideoCapture(0)
 
 # Grab the labels from the labels.txt file. This will be used later.
 labels = open('labels.txt', 'r').readlines()
+
+ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+ser.reset_input_buffer()
 
 while True:
     # Grab the webcameras image.
@@ -35,9 +40,35 @@ while True:
     print(labels[np.argmax(probabilities)])
     # Listen to the keyboard for presses.
     keyboard_input = cv2.waitKey(1)
+    # Serial with arduino
+    if labels[np.argmax(probabilities)] == 'CET':
+        ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+        ser.reset_input_buffer()
+        ser.write(b"1/n")
+        line = ser.readline().decode('utf-8').rstrip()
+        print(line)
+        time.sleep(1)
+        ser.write(b"1/n")
+        line = ser.readline().decode('utf-8').rstrip()
+        print(line)
+        time.sleep(1)
+        break
+    if labels[np.argmax(probabilities)] == 'PET':
+        ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+        ser.reset_input_buffer()
+        ser.write(b"2/n")
+        line = ser.readline().decode('utf-8').rstrip()
+        print(line)
+        time.sleep(1)
+        ser.write(b"2/n")
+        line = ser.readline().decode('utf-8').rstrip()
+        print(line)
+        time.sleep(1)
+        break
     # 27 is the ASCII for the esc key on your keyboard.
     if keyboard_input == 27:
         break
+
 
 camera.release()
 cv2.destroyAllWindows()

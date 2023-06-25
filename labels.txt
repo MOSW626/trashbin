@@ -1,2 +1,2 @@
-0 PET
-1 CET
+PET
+CET
