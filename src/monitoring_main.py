@@ -6,13 +6,13 @@ import time
 import RPi.GPIO as GPIO
 
 # Load the model
-model = load_model('keras_model.h5')
+model = load_model('/home/trashbin/Desktop/trashbin/keras_model.h5')
 
 # CAMERA can be 0 or 1 based on the default camera of your computer.
 camera = cv2.VideoCapture(0)
 
 # Grab the labels from the labels.txt file. This will be used later.
-labels = open('labels.txt', 'r').readlines()
+labels = open('/home/trashbin/Desktop/trashbin/labels.txt', 'r').readlines()
 
 ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
 ser.reset_input_buffer()
